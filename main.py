@@ -4,8 +4,7 @@ from unittest import main
 import replit
 replit.clear() # clear output in console
 
-#print(add_time("11:06 PM", "2:02"))
-print(1, add_time("3:30 PM", "2:12")) # "5:42 PM"
+print(add_time("11:06 PM", "2:02"))
 
 # Run unit tests automatically
 main(module='test_module', exit=False)

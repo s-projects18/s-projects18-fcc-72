@@ -1,5 +1,4 @@
-# Do not import any Python libraries
-# ??? REDO ALL THE STUFF.......
+# V1: Datetime-version
 from datetime import timedelta, datetime
 
 def add_time(start, duration, day=None):
@@ -15,7 +14,9 @@ def add_time(start, duration, day=None):
     for i in range(len(days)):
       if day==days[i]:
         weekday='0' + str(i+1) # 01: monday
-        withDay = start + ' '+weekday+'.06.2020' # 01.06.2020 = monday
+        # 01.06.2020 = monday
+        # 02.06.2020 = tuesday etc
+        withDay = start + ' '+weekday+'.06.2020' 
         break   
     
   try:
@@ -39,11 +40,23 @@ def add_time(start, duration, day=None):
 
 
   # format output -----------------------------
-  if withDay is None:
-    new_time = nt.strftime('%I:%M %p').strip('0')
-  else:
-    new_time = nt.strftime('%I:%M %p, %A').strip('0')
-    #TODO
+  diff = int(nt.strftime('%d')) - int(startTime.strftime('%d'))
 
+  if withDay is None:
+    if(diff==0):
+      new_time = nt.strftime('%I:%M %p').strip('0')
+    elif (diff==1):
+      new_time = nt.strftime('%I:%M %p (next day)').strip('0')
+    else:
+      new_time = nt.strftime('%I:%M %p (nn days later)').strip('0').replace('nn', str(diff))    
+  else:
+    if(diff==0):
+      new_time = nt.strftime('%I:%M %p, %A').strip('0')
+    elif (diff==1):
+      new_time = nt.strftime('%I:%M %p, %A (next day)').strip('0')
+    else:
+      new_time = nt.strftime('%I:%M %p, %A (nn days later)').strip('0').replace('nn', str(diff))
   return new_time
 
+ 
+        
