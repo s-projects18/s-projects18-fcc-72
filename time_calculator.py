@@ -1,17 +1,40 @@
 # V2: using no imports, no checks
 def add_time(start, duration, day=None):
+  days =["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+
   sec = convert_12_to_sec(start)
   sec = sec + convert_dur_to_sec(duration)
 
+  # TODO: Errors in 12:00 / 00:00 situation
   r = convert_sec_to_12(sec)
-  print(r)
   day_part = ""
   if r[1]==1:
     day_part = " (next day)"
   elif r[1]>1:
     day_part = " (" + str(r[1]) + " days later)"
-  new_time = r[0] + day_part
+
+  week_day_part = ""
+  day_index = get_day_index(day, days)
+  if day_index is not None:
+    i = (day_index + r[1]) % 7
+    week_day_part = ", " + days[i].capitalize()
+
+  new_time = r[0] + week_day_part + day_part
+
+  print(new_time)
   return new_time
+
+# ------------ helper -------------------
+def get_day_index(day, days):
+  """return zero-based index of day based on days-array"""
+  if day is not None:
+    day = day.lower()
+    for i in range(len(days)):
+      if days[i]==day:
+        di = i
+        break
+    return di
+  return None
 
 def convert_dur_to_sec(dur):
   """convert e.g. 3:12 (hours:minutes) in seconds"""
@@ -27,8 +50,7 @@ def convert_dur_to_sec(dur):
 # NOT: 00:00
 def convert_12_to_sec(time):
   """convert a 12-hour-time string into seconds.
-  time: 11:06 PM
-  """
+  time: 11:06 PM"""
   p1 = time.split(':')
   p2 = p1[1].split(' ')
   if p2[1]=='PM':
