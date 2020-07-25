@@ -2,11 +2,14 @@
 def add_time(start, duration, day=None):
   days =["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
 
+  # calculate seconds on start+duration
   sec = convert_12_to_sec(start)
   sec = sec + convert_dur_to_sec(duration)
 
-  # TODO: Errors in 12:00 / 00:00 situation
+  # get time and days
   r = convert_sec_to_12(sec)
+
+  # format output
   day_part = ""
   if r[1]==1:
     day_part = " (next day)"
@@ -20,8 +23,6 @@ def add_time(start, duration, day=None):
     week_day_part = ", " + days[i].capitalize()
 
   new_time = r[0] + week_day_part + day_part
-
-  print(new_time)
   return new_time
 
 # ------------ helper -------------------
@@ -76,7 +77,9 @@ def convert_sec_to_12(sec):
   if h24 >= 12:
     mode = "PM"
     if h24 > 12:
-      h12 = h24 - 12
+      h12 = h24 - 12 # 13:00 > 01:00 PM
+  elif h24==0:
+    h12 = h24 + 12 # 00:00 > 12:00 AM
   time = str(int(h12)) + ":" + add_zero(m) + " " + mode
   return [time, int(d)]
   
